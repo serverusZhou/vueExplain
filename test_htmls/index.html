@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<div id="app">
+  {{message}}
+  <span v-bind:title="message1">
+
+  </span>
+  <todo-item v-bind:message="hello"></todo-item>
+</div>
+<script src="dist/vue.js"></script>
+<script type="text/javascript">
+	// 定义名为 todo-item 的新组件
+	Vue.component('todo-item', {
+	  template: '<li>这是个待办项{{message}}</li>',
+	  props: ['message'],
+	  created: function(){
+	  	console.log("this.$props",this.$props);
+	  }
+	})
+	
+	var app = new Vue({
+	  el: '#app',
+	  data: {
+	    message: 'Hello Vue!',
+	    message1: '页面加载于 ' + new Date(),
+	    hello: 'hello',
+	    testObj: {
+	    	animal: "小狗",
+	    	plant: "earth"
+	    },
+	    testArray: [
+	    'a',
+	    'b'
+	    ]
+	  }
+	})
+
+	console.log("app.$data",app.$data);
+	console.log("app.$props",app.$props);
+	app.$data = {};
+	app.$set(app.$data,"message","hello $set");
+	app.$set(app.$data.testObj,"plant","air");
+	alert(app.$data.testObj.plant);
+	app.$delete(app.$data.testObj,"plant");
+	alert(app.$data.testObj.plant);
+	app.$set(app.$data.testArray,0,"ab");
+	alert(app.$data.testArray[0]);
+
+	app.$delete(app.$data.testArray,0);
+	alert(app.$data.testArray[0]);
+</script>
+</body>
+</html>
