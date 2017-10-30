@@ -32,8 +32,12 @@ function Vue (options) {
     目的就是添加_init原型方法
 */
 initMixin(Vue)
-
+/*
+  @explain stateMixin
+    目的就是初始数据的操作，查看，修改和观察
+*/
 stateMixin(Vue)
+
 eventsMixin(Vue)
 lifecycleMixin(Vue)
 renderMixin(Vue)

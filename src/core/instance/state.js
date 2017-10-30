@@ -316,9 +316,8 @@ function createWatcher (
 }
 
 export function stateMixin (Vue: Class<Component>) {
-  // flow somehow has problems with directly declared definition object
-  // when using Object.defineProperty, so we have to procedurally build up
-  // the object here.
+  // 此方法涉及state（数据）的获取，修改，以及监视。
+  // 数据的获取和修改使用了defineProperty
   const dataDef = {}
   dataDef.get = function () { return this._data }
   const propsDef = {}
@@ -329,8 +328,8 @@ export function stateMixin (Vue: Class<Component>) {
     */
     dataDef.set = function (newData: Object) {
       warn(
-        '不允许更改Vue实例的根数据 $data。' +
-        '请用嵌套的字数据进行替换。',
+        '不允直接更改根数据 $data。' +
+        '请用嵌套的子数据进行替换。',
         this
       )
     }
@@ -359,7 +358,10 @@ export function stateMixin (Vue: Class<Component>) {
     作用为：删除数据中某个对象或者数组中的某个值（此删除表示直接将节点删除，长度直接减1）
   */
   Vue.prototype.$delete = del
-
+  /**
+   * 为原型链添加 $watch方法
+   * 实现watch有两种方法.1.直接this.$watch，就是下面方法实现的。2.直接添加watch对象。
+   */
   Vue.prototype.$watch = function (
     expOrFn: string | Function,
     cb: any,
