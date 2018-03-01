@@ -55,6 +55,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
 
   extend(Vue.options.components, builtInComponents)
 
+  console.info('进入了global-api')
   initUse(Vue)
   initMixin(Vue)
   initExtend(Vue)

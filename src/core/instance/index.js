@@ -9,7 +9,8 @@ import { warn } from '../util/index'
  * Vue主要方法
  * 通过Vue实例初始化Vue，一般单页面项目只会初始化一次。
  */
-function Vue (options) {
+function Vue(options) {
+  console.info('最初传进来的options\n', options, '\n\n')
   /*
     Vue需要通过构造方法运行，如果直接运行方法，会报错，且会终止。（this为空，所以_init的指向为空，报错终止执行。）
   */
@@ -39,7 +40,9 @@ initMixin(Vue)
 stateMixin(Vue)
 
 eventsMixin(Vue)
+
 lifecycleMixin(Vue)
+
 renderMixin(Vue)
 
 export default Vue

@@ -15,6 +15,7 @@ export function initProvide (vm: Component) {
 
 export function initInjections (vm: Component) {
   const result = resolveInject(vm.$options.inject, vm)
+  console.log('initInjectionsinitInjectionsinitInjections', result)
   if (result) {
     observerState.shouldConvert = false
     Object.keys(result).forEach(key => {

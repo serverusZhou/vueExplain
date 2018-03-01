@@ -12,17 +12,20 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
 
-export function initMixin (Vue: Class<Component>) {
+export function initMixin(Vue: Class<Component>) {
   /*
     实现init方法
   */
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
-    // a uid
+    // 定义一个id，用来记录VUE的实例次数
     vm._uid = uid++
 
     let startTag, endTag
-    /* istanbul ignore if */
+    /*
+      为了记录运行时间而用的
+      运用到了（window.performance.mark）
+    */
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
       startTag = `vue-perf-init:${vm._uid}`
       endTag = `vue-perf-end:${vm._uid}`
@@ -31,13 +34,12 @@ export function initMixin (Vue: Class<Component>) {
 
     // a flag to avoid this being observed
     vm._isVue = true
-    // merge options
-    console.log('options', options)
-    console.log('options._isComponent', options._isComponent)
+
+    console.log('\n 判断vm.constructor指向是不是VUE', (vm.constructor === Vue), '\n')
+    // 其实vm.constructor是在global-api的extend.js中定义的
+    // 判断是否是组件，VUE.component
     if (options && options._isComponent) { // 如果是组件,特殊处理
-      // optimize internal component instantiation
-      // since dynamic options merging is pretty slow, and none of the
-      // internal component options needs special treatment.
+      // 设置如果是组件时候的options
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
@@ -57,7 +59,7 @@ export function initMixin (Vue: Class<Component>) {
     initLifecycle(vm) // 实例生命周期
     initEvents(vm)
     initRender(vm)
-    console.log('页面渲染结束')
+    console.info('\n', '页面渲染结束', '\n')
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
     initState(vm)
@@ -71,13 +73,16 @@ export function initMixin (Vue: Class<Component>) {
       measure(`${vm._name} init`, startTag, endTag)
     }
 
+    console.log('vm.$options.elvm.$options.elvm.$options.elvm.$options.el', vm.$options.el)
     if (vm.$options.el) {
+      console.log('vm.$options.elvm.$options.elvm.$options.el', vm.$options.el)
       vm.$mount(vm.$options.el)
     }
   }
 }
 
-function initInternalComponent (vm: Component, options: InternalComponentOptions) {
+function initInternalComponent(vm: Component, options: InternalComponentOptions) {
+  console.info('\n 当是组件的时候，vm.constructor.options为', vm.constructor.options, '\n')
   const opts = vm.$options = Object.create(vm.constructor.options)
   // doing this because it's faster than dynamic enumeration.
   opts.parent = options.parent
@@ -94,8 +99,9 @@ function initInternalComponent (vm: Component, options: InternalComponentOptions
   }
 }
 
-export function resolveConstructorOptions (Ctor: Class<Component>) {
+export function resolveConstructorOptions(Ctor: Class<Component>) {
   let options = Ctor.options
+  console.log('Ctor.options', options)
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
     const cachedSuperOptions = Ctor.superOptions
@@ -118,7 +124,7 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {
   return options
 }
 
-function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
+function resolveModifiedOptions(Ctor: Class<Component>): ?Object {
   let modified
   const latest = Ctor.options
   const extended = Ctor.extendOptions
@@ -132,7 +138,7 @@ function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
   return modified
 }
 
-function dedupe (latest, extended, sealed) {
+function dedupe(latest, extended, sealed) {
   // compare latest and sealed to ensure lifecycle hooks won't be duplicated
   // between merges
   if (Array.isArray(latest)) {
