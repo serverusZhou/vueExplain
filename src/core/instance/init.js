@@ -57,6 +57,7 @@ export function initMixin(Vue: Class<Component>) {
     // expose real self
     vm._self = vm
     initLifecycle(vm) // 实例生命周期
+    // 页面事件 on emit （需要同一个对象中才行，也就是bus的由来）
     initEvents(vm)
     initRender(vm)
     console.info('\n', '页面渲染结束', '\n')

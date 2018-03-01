@@ -40,15 +40,19 @@
 				setTimeout(function () {
 					that.testWatch = "iii";
 				}, 1000)
-				this.$on("sendMessage", function () {
-					console.log("------------");
+				setTimeout(() => {
+					console.log('((((emit))))');
+					this.$emit("send-message", '55555555555')
+				},3000)
+				this.$on("send-message", function () {
+					console.log("你姥姥的");
 				})
 			},
 			inject: ['testObj'],
 			methods: {
 				testClick: function () {
 					console.log("进入了 click");
-				}
+				},
 			}
 			// watch: {
 			// 	testWatch: function(){
@@ -70,7 +74,17 @@
 				testArray: [
 					'a',
 					'b'
-				]
+				],
+				created: function () {
+					this.$on("send-message", function () {
+						console.log("------------");
+					})
+				},
+			},
+			methods:{
+				sendMessage: function () {
+					console.log("------------");
+				},
 			},
 			provide() {
 				return {

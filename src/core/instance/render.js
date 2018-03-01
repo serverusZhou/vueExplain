@@ -30,11 +30,14 @@ import { renderStatic, markOnce } from './render-helpers/render-static'
 import { bindObjectListeners } from './render-helpers/bind-object-listeners'
 import { resolveSlots, resolveScopedSlots } from './render-helpers/resolve-slots'
 
-export function initRender (vm: Component) {
+export function initRender(vm: Component) {
   vm._vnode = null // the root of the child tree
   vm._staticTrees = null
   const parentVnode = vm.$vnode = vm.$options._parentVnode // the placeholder node in parent tree
+  console.log(' \n render时候的parentVnode', parentVnode, '\n')
   const renderContext = parentVnode && parentVnode.context
+  console.log(' \n vm.$options._renderChildren', vm.$options._renderChildren, '\n')
+  console.log(' \n renderContext', renderContext, '\n')
   vm.$slots = resolveSlots(vm.$options._renderChildren, renderContext)
   vm.$scopedSlots = emptyObject
   // bind the createElement fn to this instance
@@ -64,7 +67,7 @@ export function initRender (vm: Component) {
   }
 }
 
-export function renderMixin (Vue: Class<Component>) {
+export function renderMixin(Vue: Class<Component>) {
   Vue.prototype.$nextTick = function (fn: Function) {
     return nextTick(fn, this)
   }
